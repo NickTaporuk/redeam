@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+  redeam-postgres:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d/
+    env_file:
+      - ./../.env
+  redeam:
+    image: redeam:latest
+    build:
+      context: ./redeam
+      dockerfile: Dockerfile
+    ports:
+      - "7777:7777"
+    env_file:
+      - ./../.env
+
