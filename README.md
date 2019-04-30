@@ -36,3 +36,5 @@
     6. Send the project along as a git repository.
     
     Again, I want to be sensitive to his time, so I would suggest no more than 8 hours work on this, but it's crucial for us to get a sense of his coding skills!
+    
+#### Action plan 
