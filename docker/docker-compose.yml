@@ -1,13 +1,13 @@
 version: "3.7"
 services:
   redeam-postgres:
-    image: postgres
+    image: postgres:11.2-alpine
     ports:
       - "5432:5432"
     volumes:
       - ./postgres/init:/docker-entrypoint-initdb.d/
     env_file:
-      - ./../.env
+      - ./.env
   redeam:
     image: redeam:latest
     build:
@@ -16,5 +16,5 @@ services:
     ports:
       - "7777:7777"
     env_file:
-      - ./../.env
+      - ./.env
 
