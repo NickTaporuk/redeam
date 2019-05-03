@@ -1,10 +1,11 @@
 package seeds
 
 import (
-	"github.com/NickTaporuk/redeam/src/models"
-	"github.com/bxcodec/faker/v3"
 	"math/rand"
 	"time"
+
+	"github.com/NickTaporuk/redeam/src/models"
+	"github.com/bxcodec/faker/v3"
 )
 
 // Seeds is fake database data for initiate db

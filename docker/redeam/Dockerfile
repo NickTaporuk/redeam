@@ -4,7 +4,7 @@
 # you can change golang version if it need
 ARG GOLANG_VERSION=1.12.4-stretch
 
-# default alpine container
+# default alpine container version
 ARG ALPINE_CONTAINER_VERSION=3.7
 
 FROM golang:${GOLANG_VERSION} as scratch-base

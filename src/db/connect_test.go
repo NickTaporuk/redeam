@@ -46,34 +46,6 @@ func TestDatabaseConfig_String(t *testing.T) {
 	}
 }
 
-func TestInit(t *testing.T) {
-	type args struct {
-		dbType  string
-		host    string
-		user    string
-		dbName  string
-		passw   string
-		port    string
-		sslMode string
-		migrate bool
-		seeds   bool
-	}
-	tests := []struct {
-		name string
-		args args
-		want *DatabaseConfig
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := Init(tt.args.dbType, tt.args.host, tt.args.user, tt.args.dbName, tt.args.passw, tt.args.port, tt.args.sslMode, tt.args.migrate, tt.args.seeds); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Init() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func TestNewConnection(t *testing.T) {
 	type args struct {
 		dbCnf *DatabaseConfig

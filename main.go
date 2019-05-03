@@ -1,10 +1,12 @@
 package main
 
 import (
+	"log"
+
 	"github.com/NickTaporuk/redeam/src/app"
 	"github.com/NickTaporuk/redeam/src/utils"
 	"github.com/joho/godotenv"
-	log "github.com/sirupsen/logrus"
+	_ "github.com/lib/pq"
 )
 
 const (
@@ -33,11 +35,12 @@ func main() {
 		Version: AppVersion,
 	}
 
-	defer m.Close()
-
 	err := m.Run()
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer m.Close()
+
 }

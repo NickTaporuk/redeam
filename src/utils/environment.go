@@ -8,7 +8,7 @@ import (
 
 const (
 	// EnvVarNotFound
-	EnvVarNotFound = "Requirenment environment variable key name %s not found"
+	EnvVarNotFound = "Environment variable key name %s not found"
 )
 
 func EnvVarExists(key string) (value string, err error) {
