@@ -37,4 +37,12 @@
     
     Again, I want to be sensitive to his time, so I would suggest no more than 8 hours work on this, but it's crucial for us to get a sense of his coding skills!
     
-#### Action plan 
+#### Action plan
+    Error pattern
+    Database dependency injection
+    Tests
+
+#### Linter
+I use [golangci-lint](https://github.com/golangci/golangci-lint)
+##### Link for tuning IDE
+    https://www.jetbrains.com/help/go/settings-tools-file-watchers.html

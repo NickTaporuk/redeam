@@ -2,4 +2,10 @@ module github.com/NickTaporuk/redeam
 
 go 1.12
 
-require github.com/joho/godotenv v1.3.0
+require (
+	github.com/bxcodec/faker/v3 v3.0.0
+	github.com/jinzhu/gorm v1.9.5
+	github.com/joho/godotenv v1.3.0
+	github.com/lib/pq v1.1.0
+	github.com/sirupsen/logrus v1.2.0
+)
