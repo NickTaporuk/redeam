@@ -59,6 +59,8 @@ func CheckEnvVar(key string, data map[string]string) (err error) {
 // Init intialize db
 func Init() (*gorm.DB, error) {
 	var err error
+	var conn *gorm.DB
+
 	data := make(map[string]string)
 
 	err = CheckEnvVar(EnvNameDatabaseType, data)
@@ -109,7 +111,7 @@ func Init() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	conn, err := NewConnection(dbConf)
+	conn, err = NewConnection(dbConf)
 	if err != nil {
 		return nil, err
 	}
