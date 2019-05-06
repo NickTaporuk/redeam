@@ -5,12 +5,12 @@ import (
 	"context"
 	_ "database/sql"
 	"fmt"
-	"github.com/DATA-DOG/go-sqlmock"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/NickTaporuk/redeam/src/core"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -538,9 +538,7 @@ func TestUpdateBook(t *testing.T) {
 			var w *httptest.ResponseRecorder
 
 			tt.mockDB.
-				//ExpectQuery("^UPDATE \"books\" (.+)").
 				ExpectExec("^UPDATE \"books\" SET \"author\" = (.+), \"updated_at\" = (.+)  WHERE \"books\".\"id\" = (.+)").
-				//WillReturnRows(nil).
 				WillReturnResult(sqlmock.NewResult(1, 1)).
 				WillReturnError(tt.err)
 
@@ -695,9 +693,7 @@ func TestDeleteBook(t *testing.T) {
 			var w *httptest.ResponseRecorder
 
 			tt.mockDB.
-				//ExpectQuery("^UPDATE \"books\" (.+)").
 				ExpectExec("^DELETE FROM \"books\"").
-				//WillReturnRows(nil).
 				WillReturnResult(sqlmock.NewResult(1, 1)).
 				WillReturnError(tt.err)
 
