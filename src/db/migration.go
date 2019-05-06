@@ -9,7 +9,7 @@ var (
 	// books use for initiate books model
 	books models.Books
 	// MigrateModels is collection of migrate models
-	MigrateModels models.RedeamModels = []models.RedeamModel{
+	MigrateModels = []models.RedeamModel{
 		&books,
 	}
 )

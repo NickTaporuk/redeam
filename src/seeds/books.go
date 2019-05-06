@@ -22,6 +22,36 @@ func Seeds() models.RedeamModels {
 			CreatedAt:   time.Now(),
 			UpdatedAt:   time.Now(),
 		},
+		&models.Books{
+			Author:      faker.Username(),
+			Title:       faker.Paragraph(),
+			Publisher:   faker.Username(),
+			PublishDate: time.Now(),
+			Rating:      uint8(rand.Intn(3)),
+			Status:      true,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		},
+		&models.Books{
+			Author:      faker.Username(),
+			Title:       faker.Paragraph(),
+			Publisher:   faker.Username(),
+			PublishDate: time.Now(),
+			Rating:      uint8(rand.Intn(3)),
+			Status:      true,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		},
+		&models.Books{
+			Author:      faker.Username(),
+			Title:       faker.Paragraph(),
+			Publisher:   faker.Username(),
+			PublishDate: time.Now(),
+			Rating:      uint8(rand.Intn(3)),
+			Status:      true,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		},
 	}
 
 	return seeds

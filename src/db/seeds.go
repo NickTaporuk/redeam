@@ -17,7 +17,7 @@ func DatabaseMigrateSeeds(db *gorm.DB, mds models.RedeamModels) error {
 	}
 
 	for _, md := range mds {
-		if err = db.FirstOrInit(md).Error; gorm.IsRecordNotFoundError(err) {
+		if err = db.Create(md).Error; gorm.IsRecordNotFoundError(err) {
 			tx.Rollback()
 			return err
 		}

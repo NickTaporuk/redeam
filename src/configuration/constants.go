@@ -1,4 +1,4 @@
-package db
+package configuration
 
 const (
 	// EnvNameDatabaseType is env key for database name
@@ -19,4 +19,8 @@ const (
 	EnvNameDatabaseSSLMode = "POSTGRES_SSL_MODE"
 	// EnvNameSeeds is env key database seeds create
 	EnvNameSeeds = "SEEDS"
+	// ServicePort is server port
+	ServicePort = "SERVER_PORT"
+	// ServiceHost is server host
+	ServiceHost = "SERVER_HOST"
 )

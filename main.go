@@ -32,9 +32,7 @@ func init() {
 
 func main() {
 	var err error
-	var m app.Main
-
-	m = app.Main{}
+	var m = app.Main{}
 
 	m.SetVersion(AppVersion)
 
@@ -50,5 +48,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	defer m.Close()
+	defer func() {
+		err = m.Close()
+
+		log.Fatal(err)
+	}()
 }
