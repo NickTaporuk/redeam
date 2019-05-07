@@ -37,12 +37,20 @@
     
     Again, I want to be sensitive to his time, so I would suggest no more than 8 hours work on this, but it's crucial for us to get a sense of his coding skills!
     
-#### Action plan
-    Error pattern
-    Database dependency injection
-    Tests
+#### Init app
+To init app you need move the make commands:
 
+    make init
+    cd docker
+    docker-compose up -d
+
+#### To test app
+    go test -race ./... 
 #### Linter
 I use [golangci-lint](https://github.com/golangci/golangci-lint)
-##### Link for tuning IDE
+##### Linter for IDE
     https://www.jetbrains.com/help/go/settings-tools-file-watchers.html
+
+#### Postman link to collections
+[Books Api Collection](https://www.getpostman.com/collections/64a2a9df0e22949de401)
+
