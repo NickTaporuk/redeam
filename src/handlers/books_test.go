@@ -561,7 +561,7 @@ func TestUpdateBook(t *testing.T) {
 }
 
 func TestDeleteBook(t *testing.T) {
-	var rows, rows1, rows2 *sqlmock.Rows
+	var rows, rows1, rows2, rows3 *sqlmock.Rows
 
 	rows = sqlmock.
 		NewRows([]string{"author"}).
@@ -570,6 +570,7 @@ func TestDeleteBook(t *testing.T) {
 	rows1 = sqlmock.NewRows([]string{"author"})
 	// rows2 is sql result set
 	rows2 = sqlmock.NewRows([]string{"author"}).AddRow("test")
+	rows3 = sqlmock.NewRows([]string{"id", "author"}).AddRow(1, "test")
 
 	var path string
 	var vars = map[string]string{
@@ -605,14 +606,16 @@ func TestDeleteBook(t *testing.T) {
 	}
 
 	tests := []struct {
-		name         string
-		args         args
-		mockDB       sqlmock.Sqlmock
-		responseCode int
-		rows         *sqlmock.Rows
-		resultRows   *sqlmock.Rows
-		err          error
-		wantErr      bool
+		name          string
+		args          args
+		mockDB        sqlmock.Sqlmock
+		responseCode  int
+		rows          *sqlmock.Rows
+		resultRows    *sqlmock.Rows
+		err           error
+		sqlSelectRows *sqlmock.Rows
+		sqlSelectErr  error
+		wantErr       bool
 	}{
 		{
 			name: "DeleteBook handler test 1 positive",
@@ -620,23 +623,25 @@ func TestDeleteBook(t *testing.T) {
 				r: req,
 				w: wr,
 			},
-			mockDB:       mock,
-			responseCode: http.StatusOK,
-			rows:         rows,
-			resultRows:   rows2,
+			mockDB:        mock,
+			responseCode:  http.StatusOK,
+			rows:          rows,
+			resultRows:    rows2,
+			sqlSelectRows: rows3,
 		},
 		{
-			name: "DeleteBook handler test 2 negative emulate db error",
+			name: "DeleteBook handler test 2 negative emulate select db error",
 			args: args{
 				r: req1,
 				w: wr1,
 			},
-			mockDB:       mock1,
-			responseCode: http.StatusInternalServerError,
-			wantErr:      true,
-			rows:         rows1,
-			resultRows:   rows2,
-			err:          gorm.ErrRecordNotFound,
+			mockDB:        mock1,
+			responseCode:  http.StatusInternalServerError,
+			wantErr:       true,
+			rows:          rows1,
+			resultRows:    rows2,
+			sqlSelectRows: rows3,
+			sqlSelectErr:  gorm.ErrRecordNotFound,
 		},
 		{
 			name: "DeleteBook handler test 3 negative without context",
@@ -644,11 +649,12 @@ func TestDeleteBook(t *testing.T) {
 				r: req2,
 				w: wr2,
 			},
-			mockDB:       mock2,
-			responseCode: http.StatusInternalServerError,
-			wantErr:      true,
-			rows:         rows,
-			resultRows:   rows2,
+			mockDB:        mock2,
+			responseCode:  http.StatusInternalServerError,
+			wantErr:       true,
+			rows:          rows,
+			resultRows:    rows2,
+			sqlSelectRows: rows3,
 		},
 		{
 			name: "DeleteBook handler test 4 negative without params",
@@ -656,11 +662,12 @@ func TestDeleteBook(t *testing.T) {
 				r: req3,
 				w: wr3,
 			},
-			mockDB:       mock3,
-			responseCode: http.StatusBadRequest,
-			wantErr:      true,
-			rows:         rows,
-			resultRows:   rows2,
+			mockDB:        mock3,
+			responseCode:  http.StatusBadRequest,
+			wantErr:       true,
+			rows:          rows,
+			resultRows:    rows2,
+			sqlSelectRows: rows3,
 		},
 		{
 			name: "DeleteBook handler test 5 negative without body",
@@ -668,11 +675,12 @@ func TestDeleteBook(t *testing.T) {
 				r: req4,
 				w: wr4,
 			},
-			mockDB:       mock4,
-			responseCode: http.StatusBadRequest,
-			wantErr:      true,
-			rows:         rows,
-			resultRows:   rows2,
+			mockDB:        mock4,
+			responseCode:  http.StatusBadRequest,
+			wantErr:       true,
+			rows:          rows,
+			resultRows:    rows2,
+			sqlSelectRows: rows3,
 		},
 		{
 			name: "DeleteBook handler test 6 negative with empty body",
@@ -685,12 +693,18 @@ func TestDeleteBook(t *testing.T) {
 			wantErr:      true,
 			rows:         rows,
 			resultRows:   rows2,
+			sqlSelectRows: rows3,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var w *httptest.ResponseRecorder
+
+			tt.mockDB.
+				ExpectQuery("^SELECT (.+) FROM \"books\" WHERE \"books\".\"id\" = (.+) ORDER BY \"books\".\"id\" ASC LIMIT 1").
+				WillReturnRows(tt.sqlSelectRows).
+				WillReturnError(tt.sqlSelectErr)
 
 			tt.mockDB.
 				ExpectExec("^DELETE FROM \"books\"").

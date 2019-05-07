@@ -233,13 +233,19 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 
 		book.ID = bookIDConverted
 
-		if db.Model(&book).Delete(book).RecordNotFound() {
+		if db.First(&book).RecordNotFound() {
 			err = ErrorRecordByIDNotFound
 			utils.RespondError(w, r, http.StatusInternalServerError, err.Error())
 			return
 		}
 
-		utils.RespondJSON(w, http.StatusOK, &book)
+		db.Model(&book).Delete(book)
+
+		utils.RespondJSON(w, http.StatusOK, struct {
+			Message string
+		}{
+			Message:"record deleted",
+		})
 
 	} else {
 		err = ErrorHttpParameterIDRequired

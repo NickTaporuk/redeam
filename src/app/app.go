@@ -2,11 +2,11 @@ package app
 
 import (
 	"context"
-	"github.com/NickTaporuk/redeam/src/core"
 	"log"
 	"net/http"
 
 	"github.com/NickTaporuk/redeam/src/configuration"
+	"github.com/NickTaporuk/redeam/src/core"
 	"github.com/NickTaporuk/redeam/src/db"
 	"github.com/NickTaporuk/redeam/src/handlers"
 	"github.com/gorilla/mux"
@@ -146,81 +146,15 @@ func (m *Main) Run() error {
 // SetRouters initiate all endpoints
 func (m *Main) SetRouters() {
 
-	m.Get(handlers.BaseRouteBooksName, m.GetBooks)
-	m.Get(handlers.BaseRouteBooksNameByID, m.GetBook)
-	m.Post(handlers.BaseRouteBooksName, m.CreateBook)
-	m.Patch(handlers.BaseRouteBooksNameByID, m.UpdateBook)
-	m.Delete(handlers.BaseRouteBooksNameByID, m.DeleteBook)
-}
+	var r *mux.Router
 
-// Wrap the router for GET method
-func (m *Main) Get(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodGet)
-}
+	r = m.Router()
 
-// Wrap the router for POST method
-func (m *Main) Post(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodPost)
-}
-
-// Wrap the router for PUT method
-func (m *Main) Put(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodPut)
-}
-
-// Wrap the router for PATCH method
-func (m *Main) Patch(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodPatch)
-}
-
-// Wrap the router for CONNECT method
-func (m *Main) Connect(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodConnect)
-}
-
-// Wrap the router for HEAD method
-func (m *Main) Head(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodHead)
-}
-
-// Wrap the router for Options method
-func (m *Main) Options(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodOptions)
-}
-
-// Wrap the router for Trace method
-func (m *Main) Trace(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodTrace)
-}
-
-// Wrap the router for DELETE method
-func (m *Main) Delete(path string, f func(w http.ResponseWriter, r *http.Request)) {
-	m.Router().HandleFunc(path, f).Methods(http.MethodDelete)
-}
-
-//To manage Books Data method GET
-func (m *Main) GetBooks(w http.ResponseWriter, r *http.Request) {
-	handlers.GetBooks(w, r)
-}
-
-//To manage single Book Data method GET
-func (m *Main) GetBook(w http.ResponseWriter, r *http.Request) {
-	handlers.GetBook(w, r)
-}
-
-//To manage Books Data method POST
-func (m *Main) CreateBook(w http.ResponseWriter, r *http.Request) {
-	handlers.CreateBook(w, r)
-}
-
-//To manage Books Data method PUT
-func (m *Main) UpdateBook(w http.ResponseWriter, r *http.Request) {
-	handlers.UpdateBook(w, r)
-}
-
-//To manage Books Data method DELETE
-func (m *Main) DeleteBook(w http.ResponseWriter, r *http.Request) {
-	handlers.DeleteBook(w, r)
+	r.HandleFunc(handlers.BaseRouteBooksName, handlers.GetBooks).Methods(http.MethodGet)
+	r.HandleFunc(handlers.BaseRouteBooksNameByID, handlers.GetBook).Methods(http.MethodGet)
+	r.HandleFunc(handlers.BaseRouteBooksName, handlers.CreateBook).Methods(http.MethodPost)
+	r.HandleFunc(handlers.BaseRouteBooksNameByID, handlers.UpdateBook).Methods(http.MethodPatch)
+	r.HandleFunc(handlers.BaseRouteBooksNameByID, handlers.DeleteBook).Methods(http.MethodDelete)
 }
 
 // Close turn off data

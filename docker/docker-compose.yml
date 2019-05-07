@@ -14,7 +14,9 @@ services:
       context: ./redeam
       dockerfile: Dockerfile
     ports:
-      - "7777:7777"
+      - "8888:8888"
     env_file:
       - ./.env
+    depends_on:
+      - redeam-postgres
 
