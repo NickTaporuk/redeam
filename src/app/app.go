@@ -100,7 +100,7 @@ func (m *Main) Init() error {
 	err = configuration.InitEnv(data)
 
 	if err != nil {
-		return err
+		log.Fatal(err)
 	}
 	// initiate db configuration
 	dbCnf, err = configuration.NewDatabaseConfig(data)
