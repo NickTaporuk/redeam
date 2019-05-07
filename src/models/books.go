@@ -64,7 +64,7 @@ func (b *Books) BeforeCreate(scope *gorm.Scope) error {
 	return nil
 }
 
-// BeforeCreate is gorm hook
+// BeforeUpdate is gorm hook
 func (b *Books) BeforeUpdate(scope *gorm.Scope) error {
 	var errText string
 
