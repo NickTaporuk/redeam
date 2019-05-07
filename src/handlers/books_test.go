@@ -14,7 +14,6 @@ import (
 	"github.com/NickTaporuk/redeam/src/core"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
-	"github.com/stretchr/testify/assert"
 )
 
 const (
@@ -23,7 +22,8 @@ const (
 )
 
 // initBooksTests is helper for init tests
-func initBooksTests(t *testing.T, method string, URL string, httpVars map[string]string, body io.Reader, ctxAdd bool) (sqlmock.Sqlmock, *http.Request, http.ResponseWriter, error) {
+// nolint
+func initBooksTests(t *testing.T, method string, url string, httpVars map[string]string, body io.Reader, ctxAdd bool) (sqlmock.Sqlmock, *http.Request, http.ResponseWriter) {
 	var err error
 	var gormDB *gorm.DB
 	db, mock, err := sqlmock.New()
@@ -32,12 +32,14 @@ func initBooksTests(t *testing.T, method string, URL string, httpVars map[string
 	}
 
 	gormDB, err = gorm.Open(dbType, db)
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
 	gormDB.LogMode(true)
 
-	var wr *httptest.ResponseRecorder
-	wr = httptest.NewRecorder()
+	var wr = httptest.NewRecorder()
 
-	req, err := http.NewRequest(method, URL, body)
+	req, err := http.NewRequest(method, url, body)
 
 	if httpVars != nil {
 		req = mux.SetURLVars(req, httpVars)
@@ -52,19 +54,17 @@ func initBooksTests(t *testing.T, method string, URL string, httpVars map[string
 		req = req.WithContext(ctx)
 	}
 
-	return mock, req, wr, nil
+	return mock, req, wr
 }
 
+//nolint
 func TestGetBooks(t *testing.T) {
 	rows := sqlmock.NewRows([]string{"id", "author"}).AddRow(1, "Jack")
 	rows1 := sqlmock.NewRows([]string{"id", "author"})
 
-	mock, req, wr, err := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, true)
-	assert.NoError(t, err)
-	mock1, req1, wr1, err1 := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, true)
-	assert.NoError(t, err1)
-	mock2, req2, wr2, err2 := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, false)
-	assert.NoError(t, err2)
+	mock, req, wr := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, true)
+	mock1, req1, wr1 := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, true)
+	mock2, req2, wr2 := initBooksTests(t, http.MethodGet, BaseRouteBooksName, nil, nil, false)
 
 	type args struct {
 		w http.ResponseWriter
@@ -142,6 +142,7 @@ func TestGetBooks(t *testing.T) {
 	}
 }
 
+//nolint
 func TestGetBook(t *testing.T) {
 	var rows, rows1 *sqlmock.Rows
 
@@ -154,14 +155,12 @@ func TestGetBook(t *testing.T) {
 	}
 	path = fmt.Sprintf(TestBaseRouteBooksNameByID, 1)
 
-	mock, req, wr, err := initBooksTests(t, http.MethodGet, path, vars, nil, true)
-	assert.NoError(t, err)
-	mock1, req1, wr1, err1 := initBooksTests(t, http.MethodGet, path, vars, nil, true)
-	assert.NoError(t, err1)
-	mock2, req2, wr2, err2 := initBooksTests(t, http.MethodGet, path, nil, nil, false)
-	assert.NoError(t, err2)
-	mock3, req3, wr3, err3 := initBooksTests(t, http.MethodGet, path, nil, nil, true)
-	assert.NoError(t, err3)
+	mock, req, wr := initBooksTests(t, http.MethodGet, path, vars, nil, true)
+	mock1, req1, wr1 := initBooksTests(t, http.MethodGet, path, vars, nil, true)
+
+	mock2, req2, wr2 := initBooksTests(t, http.MethodGet, path, nil, nil, false)
+
+	mock3, req3, wr3 := initBooksTests(t, http.MethodGet, path, nil, nil, true)
 
 	type args struct {
 		w http.ResponseWriter
@@ -250,6 +249,7 @@ func TestGetBook(t *testing.T) {
 	}
 }
 
+//nolint
 func TestCreateBook(t *testing.T) {
 	var rows, rows1, rows2 *sqlmock.Rows
 
@@ -271,23 +271,17 @@ func TestCreateBook(t *testing.T) {
 
 	path = fmt.Sprintf(TestBaseRouteBooksNameByID, 1)
 
-	mock, req, wr, err := initBooksTests(t, http.MethodPost, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err)
+	mock, req, wr := initBooksTests(t, http.MethodPost, path, vars, bytes.NewBuffer(payload), true)
 
-	mock1, req1, wr1, err1 := initBooksTests(t, http.MethodPost, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err1)
+	mock1, req1, wr1 := initBooksTests(t, http.MethodPost, path, vars, bytes.NewBuffer(payload), true)
 
-	mock2, req2, wr2, err2 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload), false)
-	assert.NoError(t, err2)
+	mock2, req2, wr2 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload), false)
 
-	mock3, req3, wr3, err3 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err3)
+	mock3, req3, wr3 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload), true)
 
-	mock4, req4, wr4, err4 := initBooksTests(t, http.MethodPost, path, nil, nil, true)
-	assert.NoError(t, err4)
+	mock4, req4, wr4 := initBooksTests(t, http.MethodPost, path, nil, nil, true)
 
-	mock5, req5, wr5, err5 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload1), true)
-	assert.NoError(t, err5)
+	mock5, req5, wr5 := initBooksTests(t, http.MethodPost, path, nil, bytes.NewBuffer(payload1), true)
 
 	type args struct {
 		w http.ResponseWriter
@@ -405,6 +399,7 @@ func TestCreateBook(t *testing.T) {
 	}
 }
 
+//nolint
 func TestUpdateBook(t *testing.T) {
 	var rows, rows1, rows2 *sqlmock.Rows
 
@@ -426,23 +421,17 @@ func TestUpdateBook(t *testing.T) {
 
 	path = fmt.Sprintf(TestBaseRouteBooksNameByID, 1)
 
-	mock, req, wr, err := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err)
+	mock, req, wr := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
 
-	mock1, req1, wr1, err1 := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err1)
+	mock1, req1, wr1 := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
 
-	mock2, req2, wr2, err2 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), false)
-	assert.NoError(t, err2)
+	mock2, req2, wr2 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), false)
 
-	mock3, req3, wr3, err3 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err3)
+	mock3, req3, wr3 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), true)
 
-	mock4, req4, wr4, err4 := initBooksTests(t, http.MethodPatch, path, nil, nil, true)
-	assert.NoError(t, err4)
+	mock4, req4, wr4 := initBooksTests(t, http.MethodPatch, path, nil, nil, true)
 
-	mock5, req5, wr5, err5 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload1), true)
-	assert.NoError(t, err5)
+	mock5, req5, wr5 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload1), true)
 
 	type args struct {
 		w http.ResponseWriter
@@ -582,23 +571,17 @@ func TestDeleteBook(t *testing.T) {
 
 	path = fmt.Sprintf(TestBaseRouteBooksNameByID, 1)
 
-	mock, req, wr, err := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err)
+	mock, req, wr := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
 
-	mock1, req1, wr1, err1 := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err1)
+	mock1, req1, wr1 := initBooksTests(t, http.MethodPatch, path, vars, bytes.NewBuffer(payload), true)
 
-	mock2, req2, wr2, err2 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), false)
-	assert.NoError(t, err2)
+	mock2, req2, wr2 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), false)
 
-	mock3, req3, wr3, err3 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), true)
-	assert.NoError(t, err3)
+	mock3, req3, wr3 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload), true)
 
-	mock4, req4, wr4, err4 := initBooksTests(t, http.MethodPatch, path, nil, nil, true)
-	assert.NoError(t, err4)
+	mock4, req4, wr4 := initBooksTests(t, http.MethodPatch, path, nil, nil, true)
 
-	mock5, req5, wr5, err5 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload1), true)
-	assert.NoError(t, err5)
+	mock5, req5, wr5 := initBooksTests(t, http.MethodPatch, path, nil, bytes.NewBuffer(payload1), true)
 
 	type args struct {
 		w http.ResponseWriter
@@ -688,11 +671,11 @@ func TestDeleteBook(t *testing.T) {
 				r: req5,
 				w: wr5,
 			},
-			mockDB:       mock5,
-			responseCode: http.StatusBadRequest,
-			wantErr:      true,
-			rows:         rows,
-			resultRows:   rows2,
+			mockDB:        mock5,
+			responseCode:  http.StatusBadRequest,
+			wantErr:       true,
+			rows:          rows,
+			resultRows:    rows2,
 			sqlSelectRows: rows3,
 		},
 	}

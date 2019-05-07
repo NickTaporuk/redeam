@@ -4,28 +4,25 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
 )
 
 // initBooksTests is helper for init tests
-func initNotFoundHandlerTests(t *testing.T, method string, URL string) (*http.Request, http.ResponseWriter, error) {
+//nolint
+func initNotFoundHandlerTests(t *testing.T, method string, url string) (*http.Request, http.ResponseWriter) {
 	var err error
 
-	var wr *httptest.ResponseRecorder
-	wr = httptest.NewRecorder()
+	var wr = httptest.NewRecorder()
 
-	req, err := http.NewRequest(method, URL, nil)
+	req, err := http.NewRequest(method, url, nil)
 
 	if err != nil {
 		t.Fatalf("an error '%s' was not expected while creating request", err)
 	}
 
-	return req, wr, nil
+	return req, wr
 }
 func TestNotFoundHandler(t *testing.T) {
-	req, wr, err := initNotFoundHandlerTests(t, http.MethodGet, "/test/test/1")
-	assert.NoError(t, err)
+	req, wr := initNotFoundHandlerTests(t, http.MethodGet, "/test/test/1")
 
 	type args struct {
 		w http.ResponseWriter

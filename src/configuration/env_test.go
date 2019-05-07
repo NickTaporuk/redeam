@@ -2,6 +2,7 @@ package configuration
 
 import "testing"
 
+// nolint
 func TestInitEnv(t *testing.T) {
 	type args struct {
 		data map[string]string

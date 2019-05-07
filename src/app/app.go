@@ -146,9 +146,7 @@ func (m *Main) Run() error {
 // SetRouters initiate all endpoints
 func (m *Main) SetRouters() {
 
-	var r *mux.Router
-
-	r = m.Router()
+	var r = m.Router()
 
 	r.HandleFunc(handlers.BaseRouteBooksName, handlers.GetBooks).Methods(http.MethodGet)
 	r.HandleFunc(handlers.BaseRouteBooksNameByID, handlers.GetBook).Methods(http.MethodGet)
@@ -172,8 +170,9 @@ func (m *Main) AddContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		if m != nil {
-			//Add data to context
+			// Add data to context
 			ctx := context.WithValue(r.Context(), core.ContextDbName, m.DB())
+
 			next.ServeHTTP(w, r.WithContext(ctx))
 		} else {
 			next.ServeHTTP(w, r)

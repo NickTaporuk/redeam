@@ -3,11 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/NickTaporuk/redeam/src/core"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/NickTaporuk/redeam/src/core"
 	"github.com/NickTaporuk/redeam/src/models"
 	"github.com/NickTaporuk/redeam/src/utils"
 	"github.com/gorilla/mux"
@@ -20,14 +20,14 @@ const (
 )
 
 var (
-	// RecordByIDNotFound is error when record isn't found in database table
+	// ErrorRecordByIDNotFound is error when record isn't found in database table
 	ErrorRecordByIDNotFound = errors.New("record was not found by ID")
-	// RecordByIDNotFound is error when record isn't found in database table
-	ErrorHttpParameterIDRequired= errors.New("parameter ID is required")
+	// ErrorHTTPParameterIDRequired is error when record isn't found in database table
+	ErrorHTTPParameterIDRequired = errors.New("parameter ID is required")
 	// ErrorDatabaseNotInitiate is error when db isn't in request context
 	ErrorDatabaseNotInitiate = errors.New("database isn't initialized by context")
-	// ErrorHttpBodyEmpty is error when http body is empty
-	ErrorHttpBodyEmpty = errors.New("http body is empty")
+	// ErrorHTTPBodyEmpty is error when http body is empty
+	ErrorHTTPBodyEmpty = errors.New("http body is empty")
 )
 
 // GetBooks is handler for book rest api
@@ -62,9 +62,8 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 	var bookIDConverted uint64
 	var err error
 	var db *gorm.DB
-	var ctxDb interface{}
 
-	ctxDb = r.Context().Value(core.ContextDbName)
+	var ctxDb = r.Context().Value(core.ContextDbName)
 	if ctxDb == nil {
 		err = ErrorDatabaseNotInitiate
 		utils.RespondError(w, r, http.StatusInternalServerError, err.Error())
@@ -96,7 +95,7 @@ func GetBook(w http.ResponseWriter, r *http.Request) {
 		utils.RespondJSON(w, http.StatusOK, book)
 
 	} else {
-		err = ErrorHttpParameterIDRequired
+		err = ErrorHTTPParameterIDRequired
 		utils.RespondError(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -108,9 +107,9 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 	var book models.Books
 	var err error
 	var db *gorm.DB
-	var ctxDb interface{}
 
-	ctxDb = r.Context().Value(core.ContextDbName)
+	var ctxDb = r.Context().Value(core.ContextDbName)
+
 	if ctxDb == nil {
 		err = ErrorDatabaseNotInitiate
 		utils.RespondError(w, r, http.StatusInternalServerError, err.Error())
@@ -120,7 +119,7 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 	db = ctxDb.(*gorm.DB)
 
 	if r.Body == nil {
-		err = ErrorHttpBodyEmpty
+		err = ErrorHTTPBodyEmpty
 		utils.RespondError(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -146,9 +145,8 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var db *gorm.DB
 	var bookID int
 	var bookIDConverted uint64
-	var ctxDb interface{}
 
-	ctxDb = r.Context().Value(core.ContextDbName)
+	var ctxDb = r.Context().Value(core.ContextDbName)
 	if ctxDb == nil {
 		err = ErrorDatabaseNotInitiate
 		utils.RespondError(w, r, http.StatusInternalServerError, err.Error())
@@ -164,7 +162,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 		var book models.Books
 
 		if r.Body == nil {
-			err = ErrorHttpBodyEmpty
+			err = ErrorHTTPBodyEmpty
 			utils.RespondError(w, r, http.StatusBadRequest, err.Error())
 			return
 		}
@@ -179,8 +177,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 		book.ID = bookIDConverted
 		book.UpdatedAt = time.Now()
 
-		var data map[string]interface{}
-		data = make(map[string]interface{})
+		var data = make(map[string]interface{})
 
 		err = json.NewDecoder(r.Body).Decode(&data)
 		if err != nil {
@@ -196,7 +193,7 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 		utils.RespondJSON(w, http.StatusOK, &book)
 
 	} else {
-		err = ErrorHttpParameterIDRequired
+		err = ErrorHTTPParameterIDRequired
 		utils.RespondError(w, r, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -208,9 +205,8 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	var bookIDConverted uint64
 	var err error
 	var db *gorm.DB
-	var ctxDb interface{}
 
-	ctxDb = r.Context().Value(core.ContextDbName)
+	var ctxDb = r.Context().Value(core.ContextDbName)
 	if ctxDb == nil {
 		err = ErrorDatabaseNotInitiate
 		utils.RespondError(w, r, http.StatusInternalServerError, err.Error())
@@ -244,11 +240,11 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 		utils.RespondJSON(w, http.StatusOK, struct {
 			Message string
 		}{
-			Message:"record deleted",
+			Message: "record deleted",
 		})
 
 	} else {
-		err = ErrorHttpParameterIDRequired
+		err = ErrorHTTPParameterIDRequired
 		utils.RespondError(w, r, http.StatusBadRequest, err.Error())
 		return
 	}

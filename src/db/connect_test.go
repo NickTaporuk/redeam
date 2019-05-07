@@ -8,6 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+//nolint
 func TestInit(t *testing.T) {
 	type args struct {
 		conf *configuration.Config
@@ -34,6 +35,7 @@ func TestInit(t *testing.T) {
 	}
 }
 
+//nolint
 func TestNewConnection(t *testing.T) {
 	type args struct {
 		conf *configuration.Config

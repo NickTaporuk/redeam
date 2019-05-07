@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+//nolint
 func TestNewConfig(t *testing.T) {
 	type args struct {
 		databaseConfig *DatabaseConfig

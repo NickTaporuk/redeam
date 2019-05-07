@@ -2,6 +2,7 @@ package app
 
 import "testing"
 
+//nolint
 func TestMain_Run(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -19,6 +20,7 @@ func TestMain_Run(t *testing.T) {
 	}
 }
 
+//nolint
 func TestMain_Close(t *testing.T) {
 	tests := []struct {
 		name string

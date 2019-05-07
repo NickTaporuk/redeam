@@ -2,6 +2,7 @@ package utils
 
 import "testing"
 
+//nolint
 func TestEnvVarExists(t *testing.T) {
 	type args struct {
 		key string

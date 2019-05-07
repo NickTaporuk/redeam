@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+// nolint
 func TestAddHeader(t *testing.T) {
 	type args struct {
 		w     http.ResponseWriter
@@ -24,6 +25,7 @@ func TestAddHeader(t *testing.T) {
 	}
 }
 
+// nolint
 func TestAddHeaderContentTypeJSON(t *testing.T) {
 	type args struct {
 		w http.ResponseWriter

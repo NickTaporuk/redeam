@@ -7,6 +7,7 @@ import (
 	"github.com/NickTaporuk/redeam/src/models"
 )
 
+//nolint
 func TestSeeds(t *testing.T) {
 	tests := []struct {
 		name string
