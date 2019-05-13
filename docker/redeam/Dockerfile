@@ -1,7 +1,7 @@
 # I use 2 stage dockerfile build for save space in disk
 
 # default golang version
-# you can change golang version if it need
+# you can change golang version if it will need
 ARG GOLANG_VERSION=1.12.4-stretch
 
 # default alpine container version
