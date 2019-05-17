@@ -126,7 +126,6 @@ func (m *Main) Init() error {
 	m.SetDB(conn)
 	// initiate not found handler
 	m.Router().NotFoundHandler = http.HandlerFunc(handlers.NotFoundHandler)
-
 	// initiate database connection
 	m.SetConfiguration(conf)
 	// initiate routers scope
@@ -156,8 +155,8 @@ func (m *Main) SetRouters() {
 }
 
 // Close turn off data
-func (m *Main) Close() (err error) {
-
+func (m *Main) Close() (e error) {
+	var err error
 	err = m.DB().Close()
 	if err != nil {
 		return err

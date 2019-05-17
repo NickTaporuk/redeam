@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redeam-test
+  labels:
+    name: redeam-pod-test
+  namespace: redeam
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+    - name: liveness
+      livenessProbe:
+        httpGet:
+          port: 7777
+          path: /healthz

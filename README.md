@@ -54,3 +54,16 @@ I use [golangci-lint](https://github.com/golangci/golangci-lint)
 #### Postman link to collections
 [Books Api Collection](https://www.getpostman.com/collections/64a2a9df0e22949de401)
 
+#### KUBERNATES
+
+###### tools
+[kubectx](https://github.com/ahmetb/kubectx) helps you switch between clusters back and forth:
+
+![kubectx demo GIF](https://github.com/ahmetb/kubectx/blob/master/img/kubectx-demo.gif)
+
+[kubens](https://github.com/ahmetb/kubectx) helps you switch between Kubernetes namespaces smoothly
+
+![kubens demo GIF](https://github.com/ahmetb/kubectx/blob/master/img/kubens-demo.gif)
+
+[helm](https://helm.sh/docs/using_helm/) install :
+    brew install kubernetes-helm

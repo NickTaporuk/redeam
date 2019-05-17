@@ -39,18 +39,17 @@ func main() {
 	err = m.Init()
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	err = m.Run()
 
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	defer func() {
-		err = m.Close()
-
-		log.Fatal(err)
+		var err = m.Close()
+		panic(err)
 	}()
 }

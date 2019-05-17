@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redeam
+  labels:
+    name: redeam-pod
+  namespace: redeam
+spec:
+  containers:
+    - name: redeam
+      image: redeam

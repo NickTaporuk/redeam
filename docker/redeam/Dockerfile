@@ -22,6 +22,8 @@ RUN CGO_ENABLED=0 go build -a -installsuffix cgo -o /$COMPAILED_APP_NAME main.go
 # end of first stage, beginning of the second one
 FROM alpine:${ALPINE_CONTAINER_VERSION}
 
+RUN apk update && apk add ca-certificates && rm -rf /var/cache/apk/*
+
 ENV COMPAILED_APP_NAME redeam-test-task
 
 COPY --from=scratch-base /$COMPAILED_APP_NAME /$COMPAILED_APP_NAME
